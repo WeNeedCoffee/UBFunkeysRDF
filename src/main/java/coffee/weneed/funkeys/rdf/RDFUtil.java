@@ -7,7 +7,7 @@ package coffee.weneed.funkeys.rdf;
  */
 public class RDFUtil {
 
-	static char[] decode = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12,
+	static char[] code = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12,
 			0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28,
 			0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E,
 			0x3F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54,
@@ -124,11 +124,6 @@ public class RDFUtil {
 			0x0C, 0x0F, 0x0E, 0x09, 0x08, 0x0B, 0x0A, 0x35, 0x34, 0x37, 0x36, 0x31, 0x30, 0x33, 0x32, 0x3D, 0x3C, 0x3F, 0x3E, 0x39, 0x38, 0x3B,
 			0x3A, 0x25, 0x24, 0x27, 0x26, 0x21, 0x20, 0x23, 0x22, 0x2D, 0x2C, 0x2F, 0x2E, 0x29, 0x28, 0x2B, 0x2A };
 
-	public static String decode(String in) {
-		String s = new String(RDFUtil.decode(in.toCharArray()));
-		return s.substring(8, s.length() - 6);
-	}
-
 	public static char[] decode(char[] in) {
 		int col = 0;
 		char[] ret = new char[in.length];
@@ -138,64 +133,64 @@ public class RDFUtil {
 			int pos = -1;
 			if (col == 0) {
 				for (ii = 0; ii < 256; ii++) {
-					if (col0[ii] == caractere_lu) {
-						ret[n++] = decode[ii];
+					if (RDFUtil.col0[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.code[ii];
 						pos = ii;
 						break;
 					}
 				}
 			} else if (col == 1) {
 				for (ii = 0; ii < 256; ii++) {
-					if (col1[ii] == caractere_lu) {
-						ret[n++] = decode[ii];
+					if (RDFUtil.col1[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.code[ii];
 						pos = ii;
 						break;
 					}
 				}
 			} else if (col == 2) {
 				for (ii = 0; ii < 256; ii++) {
-					if (col2[ii] == caractere_lu) {
-						ret[n++] = decode[ii];
+					if (RDFUtil.col2[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.code[ii];
 						pos = ii;
 						break;
 					}
 				}
 			} else if (col == 3) {
 				for (ii = 0; ii < 256; ii++) {
-					if (col3[ii] == caractere_lu) {
-						ret[n++] = decode[ii];
+					if (RDFUtil.col3[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.code[ii];
 						pos = ii;
 						break;
 					}
 				}
 			} else if (col == 4) {
 				for (ii = 0; ii < 256; ii++) {
-					if (col4[ii] == caractere_lu) {
-						ret[n++] = decode[ii];
+					if (RDFUtil.col4[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.code[ii];
 						pos = ii;
 						break;
 					}
 				}
 			} else if (col == 5) {
 				for (ii = 0; ii < 256; ii++) {
-					if (col5[ii] == caractere_lu) {
-						ret[n++] = decode[ii];
+					if (RDFUtil.col5[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.code[ii];
 						pos = ii;
 						break;
 					}
 				}
 			} else if (col == 6) {
 				for (ii = 0; ii < 256; ii++) {
-					if (col6[ii] == caractere_lu) {
-						ret[n++] = decode[ii];
+					if (RDFUtil.col6[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.code[ii];
 						pos = ii;
 						break;
 					}
 				}
 			} else if (col == 7) {
 				for (ii = 0; ii < 256; ii++) {
-					if (col7[ii] == caractere_lu) {
-						ret[n++] = decode[ii];
+					if (RDFUtil.col7[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.code[ii];
 						pos = ii;
 						break;
 					}
@@ -213,5 +208,99 @@ public class RDFUtil {
 		}
 		return ret;
 
+	}
+
+	public static String decode(String in) {
+		String s = new String(RDFUtil.decode(in.toCharArray()));
+		return s.substring(8, s.length() - 6);
+	}
+
+	public static char[] encode(char[] in) {
+		int col = 0;
+		char[] ret = new char[in.length];
+		int n = 0;
+		for (char caractere_lu : in) {
+			int ii;
+			int pos = -1;
+			if (col == 0) {
+				for (ii = 0; ii < 256; ii++) {
+					if (RDFUtil.code[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.col0[ii];
+						pos = ii;
+						break;
+					}
+				}
+			} else if (col == 1) {
+				for (ii = 0; ii < 256; ii++) {
+					if (RDFUtil.code[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.col1[ii];
+						pos = ii;
+						break;
+					}
+				}
+			} else if (col == 2) {
+				for (ii = 0; ii < 256; ii++) {
+					if (RDFUtil.code[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.col2[ii];
+						pos = ii;
+						break;
+					}
+				}
+			} else if (col == 3) {
+				for (ii = 0; ii < 256; ii++) {
+					if (RDFUtil.code[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.col3[ii];
+						pos = ii;
+						break;
+					}
+				}
+			} else if (col == 4) {
+				for (ii = 0; ii < 256; ii++) {
+					if (RDFUtil.code[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.col4[ii];
+						pos = ii;
+						break;
+					}
+				}
+			} else if (col == 5) {
+				for (ii = 0; ii < 256; ii++) {
+					if (RDFUtil.code[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.col5[ii];
+						pos = ii;
+						break;
+					}
+				}
+			} else if (col == 6) {
+				for (ii = 0; ii < 256; ii++) {
+					if (RDFUtil.code[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.col6[ii];
+						pos = ii;
+						break;
+					}
+				}
+			} else if (col == 7) {
+				for (ii = 0; ii < 256; ii++) {
+					if (RDFUtil.code[ii] == caractere_lu) {
+						ret[n++] = RDFUtil.col7[ii];
+						pos = ii;
+						break;
+					}
+				}
+			}
+			if (pos == -1) {
+				System.err.println("Column " + col + ": The value " + String.format("%04x", (int) caractere_lu) + " could not be found.\n");
+			}
+			col++;
+			if (col > 7) {
+				col = 0;
+			}
+
+		}
+		return ret;
+
+	}
+
+	public static String encode(String in) {
+		return new String(RDFUtil.encode(("û2ÓIc¯ûÿ" + in + "     ").toCharArray()));
 	}
 }
