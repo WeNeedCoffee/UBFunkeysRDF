@@ -211,8 +211,7 @@ public class RDFUtil {
 	}
 
 	public static String decode(String in) {
-		String s = new String(RDFUtil.decode(in.toCharArray()));
-		return s.substring(8, s.length() - 6);
+		return new String(RDFUtil.decode(in.toCharArray()));
 	}
 
 	public static char[] encode(char[] in) {
@@ -301,6 +300,6 @@ public class RDFUtil {
 	}
 
 	public static String encode(String in) {
-		return new String(RDFUtil.encode(("û2ÓIc¯ûÿ" + in + "     ").toCharArray()));
+		return new String(RDFUtil.encode(in.toCharArray()));
 	}
 }
