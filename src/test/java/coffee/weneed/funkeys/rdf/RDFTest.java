@@ -1,50 +1,122 @@
 package coffee.weneed.funkeys.rdf;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-
-import coffee.weneed.utils.LogicUtil;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class RDFTest {
 
-	public static void main(String[] args) throws MalformedURLException, UnsupportedEncodingException {
-		String s = new String(LogicUtil.downloadUrl(
-				new File("G:\\UBFunkeys\\U.B. Funkeys 5.0 Full by Daleth\\U.B. Funkeys\\RadicaGame\\data\\system\\config.rdf").toURI().toURL()),
-				"ISO-8859-1");
-		String d = RDFUtil.decode(s);
-		File f = new File("G:\\UBFunkeys\\New folder\\config.txt");
-		f.delete();
+	/**
+	 * https://stackoverflow.com/questions/2295221/java-net-url-read-stream-to-byte
+	 *
+	 * @author StackOverflow:ron-reiter
+	 * @param toDownload the to download
+	 * @return byte array
+	 */
+	public static byte[] downloadUrl(URL toDownload) {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
 		try {
-			FileOutputStream st = new FileOutputStream(f);
-			st.write(d.getBytes(StandardCharsets.ISO_8859_1));
-			st.flush();
-			st.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			byte[] chunk = new byte[4096];
+			int bytesRead;
+
+			URLConnection con = toDownload.openConnection();
+			con.setUseCaches(false);
+			con.setDefaultUseCaches(false);
+			InputStream stream = con.getInputStream();
+			while ((bytesRead = stream.read(chunk)) > 0) {
+				outputStream.write(chunk, 0, bytesRead);
+			}
+			stream.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
-		String e1 = RDFUtil.encode(d);
-		f = new File("G:\\UBFunkeys\\New folder\\config.rdf");
-		f.delete();
-		try {
-			FileOutputStream st = new FileOutputStream(f);
-			st.write(e1.getBytes(StandardCharsets.ISO_8859_1));
-			st.flush();
-			st.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		return outputStream.toByteArray();
+	}
+
+	public static void main(String[] args) throws MalformedURLException, UnsupportedEncodingException {
+
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		File input = new File(s + "/input");
+		File output = new File(s + "/output");
+		File info = new File(s + "/Readme.txt");
+		if (!input.exists()) {
+			input.mkdir();
+		}
+		if (!output.exists()) {
+			output.mkdir();
+		}
+		if (!info.exists()) {
+			String txt =
+					"UBFunkeys RDF Util By Daleth with plenty of help from Vincentetcarine\nhttps://github.com/WeNeedCoffee/UBFunkeysRDF\n\nUsage: \n\n1. Run once to generate the required folders\n2. Put your gamedata files in /input, put .xml files as the decoded ones you want recompiled, and .rdf for encoded ones you want to decode.\n3. Run once.\n4. ???\n5. Profit! You have decoded/encoded the rdf files!\n\nDonate to my patreon if you feel my work helped you out! https://www.patreon.com/Dalethium\n";
+			try {
+				FileOutputStream st = new FileOutputStream(info);
+				st.write(txt.getBytes());
+				st.flush();
+				st.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		for (File f : input.listFiles()) {
+			if (f.isDirectory()) {
+				continue;
+			}
+			if (f.getName().toLowerCase().endsWith(".rdf")) {
+				String d = RDFUtil.decode(new String(RDFTest.downloadUrl(f.toURI().toURL()), StandardCharsets.ISO_8859_1));
+				File f1 = new File(output.getAbsolutePath().toString() + "/" + f.getName().substring(0, f.getName().length() - 4) + ".xml");
+				if (f1.exists()) {
+					f1.delete();
+				}
+				try {
+					FileOutputStream st = new FileOutputStream(f1);
+					st.write(d.getBytes(StandardCharsets.ISO_8859_1));
+					st.flush();
+					st.close();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else if (f.getName().toLowerCase().endsWith(".xml")) {
+				String d = RDFUtil.encode(new String(RDFTest.downloadUrl(f.toURI().toURL()), StandardCharsets.ISO_8859_1));
+				File f1 = new File(output.getAbsolutePath().toString() + "/" + f.getName().substring(0, f.getName().length() - 4) + ".rdf");
+				if (f1.exists()) {
+					f1.delete();
+				}
+				try {
+					FileOutputStream st = new FileOutputStream(f1);
+					st.write(d.getBytes(StandardCharsets.ISO_8859_1));
+					st.flush();
+					st.close();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }
