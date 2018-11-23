@@ -136,23 +136,17 @@ public class RDFUtil {
 		int col = 0;
 		char[] arr = in.toCharArray();
 		char[] ret = new char[arr.length];
-		int n = 0;
+		int pos = 0;
 		int endchar = 0;
-		for (char caractere_lu : arr) {
-			int ii;
-			int pos = -1;
-			for (ii = 0; ii < 256; ii++) {
-				if (RDFUtil.col[col][ii] == caractere_lu) {
-					ret[n++] = RDFUtil.code[ii];
-					pos = ii;
-					if (RDFUtil.code[ii] == 0x3E) {
-						endchar = n;
+		for (char character : arr) {
+			for (int i = 0; i < 256; i++) {
+				if (RDFUtil.col[col][i] == character) {
+					ret[pos++] = RDFUtil.code[i];
+					if (RDFUtil.code[i] == 0x3E) {
+						endchar = pos;
 					}
 					break;
 				}
-			}
-			if (pos == -1) {
-				System.err.println("Column " + col + ": The value " + String.format("%04x", (int) caractere_lu) + " could not be found.\n");
 			}
 			col++;
 			if (col > 7) {
@@ -167,31 +161,22 @@ public class RDFUtil {
 	public static String encode(String in) {
 		int col = 0;
 		char[] arr = in.toCharArray();
-		char[] ret = new char[arr.length]; // endlen[(arr.length % 8) - 1]
-
-		int n = 0;
-		for (char caractere_lu : arr) {
-			int ii;
-			int pos = -1;
-			for (ii = 0; ii < 256; ii++) {
-				if (RDFUtil.code[ii] == caractere_lu) {
-					ret[n++] = RDFUtil.col[col][ii];
-					pos = ii;
+		char[] ret = new char[arr.length];
+		int pos = 0;
+		for (char character : arr) {
+			for (int i = 0; i < 256; i++) {
+				if (RDFUtil.code[i] == character) {
+					ret[pos++] = RDFUtil.col[col][i];
 					break;
 				}
-			}
-			if (pos == -1) {
-				System.err.println("Column " + col + ": The value " + String.format("%04x", (int) caractere_lu) + " could not be found.\n");
 			}
 			col++;
 			if (col > 7) {
 				col = 0;
 			}
-
 		}
 		return new String((new String(RDFUtil.start) + new String(ret) + new String(RDFUtil.end[col])).getBytes(StandardCharsets.ISO_8859_1),
 				StandardCharsets.ISO_8859_1);
-
 	}
 
 }
