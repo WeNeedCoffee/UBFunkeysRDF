@@ -60,18 +60,15 @@ public class RDFTest {
 			output.mkdir();
 		}
 		if (!info.exists()) {
-			String txt =
-					"UBFunkeys RDF Util By Daleth with plenty of help from Vincentetcarine\nhttps://github.com/WeNeedCoffee/UBFunkeysRDF\n\nUsage: \n\n1. Run once to generate the required folders\n2. Put your gamedata files in /input, put .xml files as the decoded ones you want recompiled, and .rdf for encoded ones you want to decode.\n3. Run once.\n4. ???\n5. Profit! You have decoded/encoded the rdf files!\n\nDonate to my patreon if you feel my work helped you out! https://www.patreon.com/Dalethium\n";
+			String txt = "UBFunkeys RDF Util By Daleth with plenty of help from Vincentetcarine\nhttps://github.com/WeNeedCoffee/UBFunkeysRDF\n\nUsage: \n\n1. Run once to generate the required folders\n2. Put your gamedata files in /input, put .xml files as the decoded ones you want recompiled, and .rdf for encoded ones you want to decode.\n3. Run once.\n4. ???\n5. Profit! You have decoded/encoded the rdf files!\n\nDonate to my patreon if you feel my work helped you out! https://www.patreon.com/Dalethium\n";
 			try {
 				FileOutputStream st = new FileOutputStream(info);
 				st.write(txt.getBytes());
 				st.flush();
 				st.close();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -92,10 +89,8 @@ public class RDFTest {
 					st.flush();
 					st.close();
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else if (f.getName().toLowerCase().endsWith(".xml")) {
@@ -110,10 +105,8 @@ public class RDFTest {
 					st.flush();
 					st.close();
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
