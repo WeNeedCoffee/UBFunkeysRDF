@@ -3,7 +3,6 @@ package coffee.weneed.funkeys.rdf;
 import java.nio.charset.StandardCharsets;
 
 /**
- *
  * @author Dalethium Based heavily off of the source written by Vincentetcarine
  *         in devc++
  */
