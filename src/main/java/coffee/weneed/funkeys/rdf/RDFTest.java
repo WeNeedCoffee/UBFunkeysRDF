@@ -2,15 +2,15 @@ package coffee.weneed.funkeys.rdf;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -23,7 +23,7 @@ public class RDFTest {
 	 * @param toDownload the to download
 	 * @return byte array
 	 */
-	public static byte[] downloadUrl(URL toDownload) {
+	public static byte[] downloadUrl(final URL toDownload) {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
 		try {
@@ -49,10 +49,10 @@ public class RDFTest {
 	public static void main(String[] args) throws MalformedURLException, UnsupportedEncodingException {
 
 		Path currentRelativePath = Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		File input = new File(s + "/input");
-		File output = new File(s + "/output");
-		File info = new File(s + "/Readme.txt");
+		String root = currentRelativePath.toAbsolutePath().toString();
+		File input = new File(root + "/input");
+		File output = new File(root + "/output");
+		File info = new File(root + "/Readme.txt");
 		if (!input.exists()) {
 			input.mkdir();
 		}
@@ -62,52 +62,46 @@ public class RDFTest {
 		if (!info.exists()) {
 			String txt = "UBFunkeys RDF Util By Daleth with plenty of help from Vincentetcarine\nhttps://github.com/WeNeedCoffee/UBFunkeysRDF\n\nUsage: \n\n1. Run once to generate the required folders\n2. Put your gamedata files in /input, put .xml files as the decoded ones you want recompiled, and .rdf for encoded ones you want to decode.\n3. Run once.\n4. ???\n5. Profit! You have decoded/encoded the rdf files!\n\nDonate to my patreon if you feel my work helped you out! https://www.patreon.com/Dalethium\n";
 			try {
-				FileOutputStream st = new FileOutputStream(info);
-				st.write(txt.getBytes());
-				st.flush();
-				st.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+				OutputStream out = Files.newOutputStream(Paths.get(info.toURI()));
+				out.write(txt.getBytes());
+				out.flush();
+				out.close();
+			} catch (IOException error) {
+				error.printStackTrace();
 			}
 		}
 
-		for (File f : input.listFiles()) {
-			if (f.isDirectory()) {
+		for (File file : input.listFiles()) {
+			if (file.isDirectory()) {
 				continue;
 			}
-			if (f.getName().toLowerCase().endsWith(".rdf")) {
-				String d = RDFUtil.decode(new String(RDFTest.downloadUrl(f.toURI().toURL()), StandardCharsets.ISO_8859_1));
-				File f1 = new File(output.getAbsolutePath().toString() + "/" + f.getName().substring(0, f.getName().length() - 4) + ".xml");
-				if (f1.exists()) {
-					f1.delete();
+			if (file.getName().toLowerCase().endsWith(".rdf")) {
+				String decoded = RDFUtil.decode(new String(RDFTest.downloadUrl(file.toURI().toURL()), StandardCharsets.ISO_8859_1));
+				File decodedFile = new File(output.getAbsolutePath().toString() + "/" + file.getName().substring(0, file.getName().length() - 4) + ".xml");
+				if (decodedFile.exists()) {
+					decodedFile.delete();
 				}
 				try {
-					FileOutputStream st = new FileOutputStream(f1);
-					st.write(d.getBytes(StandardCharsets.ISO_8859_1));
-					st.flush();
-					st.close();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
+					final OutputStream decodedOut = Files.newOutputStream(Paths.get(decodedFile.toURI()));
+					decodedOut.write(decoded.getBytes(StandardCharsets.ISO_8859_1));
+					decodedOut.flush();
+					decodedOut.close();
+				} catch (IOException error) {
+					error.printStackTrace();
 				}
-			} else if (f.getName().toLowerCase().endsWith(".xml")) {
-				String d = RDFUtil.encode(new String(RDFTest.downloadUrl(f.toURI().toURL()), StandardCharsets.ISO_8859_1));
-				File f1 = new File(output.getAbsolutePath().toString() + "/" + f.getName().substring(0, f.getName().length() - 4) + ".rdf");
-				if (f1.exists()) {
-					f1.delete();
+			} else if (file.getName().toLowerCase().endsWith(".xml")) {
+				String encoded = RDFUtil.encode(new String(RDFTest.downloadUrl(file.toURI().toURL()), StandardCharsets.ISO_8859_1));
+				File encodedFile = new File(output.getAbsolutePath().toString() + "/" + file.getName().substring(0, file.getName().length() - 4) + ".rdf");
+				if (encodedFile.exists()) {
+					encodedFile.delete();
 				}
 				try {
-					FileOutputStream st = new FileOutputStream(f1);
-					st.write(d.getBytes(StandardCharsets.ISO_8859_1));
-					st.flush();
-					st.close();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
+					OutputStream encodedOut = Files.newOutputStream(Paths.get(encodedFile.toURI()));
+					encodedOut.write(encoded.getBytes(StandardCharsets.ISO_8859_1));
+					encodedOut.flush();
+					encodedOut.close();
+				} catch (IOException error) {
+					error.printStackTrace();
 				}
 			}
 		}
